@@ -1,187 +1,64 @@
-# JWT Authentication System
+---
 
-A production-ready JWT authentication system with user, tenant, and role management. Built with Go backend, React frontend, Railway MySQL database, and deployed on Railway and Vercel.
+# Reusable Go + React JWT Authentication System
 
-## Features
+This project provides a complete, reusable JWT authentication system with a Go backend and a React frontend. It's designed for easy deployment to Railway and Vercel, with a focus on clear documentation and straightforward setup.
 
-- **JWT-based Authentication**: Secure token-based authentication with 24-hour expiration
-- **Multi-tenant Support**: Tenant isolation for user management
-- **Role-based Access Control**: Admin, user, and custom roles
-- **User Management**: Create, read, update, and delete users
-- **Cross-application Authentication**: JWT tokens can be used across multiple applications
-- **Production-ready**: Deployed on Railway (backend) and Vercel (frontend)
+This system allows you to:
 
-## Architecture
+- Authenticate users with JWT tokens.
+- Manage users, tenants, and roles.
+- Secure your applications with a robust, standalone authentication service.
+
+## Project Structure
+
+```
+.
+├── backend/         # Go backend application
+├── frontend/        # React frontend application
+├── DEPLOYMENT.md    # Detailed deployment guide for Railway and Vercel
+├── QUICKSTART.md    # 5-minute guide to get up and running
+├── TESTING.md       # Comprehensive testing guide
+└── README.md        # This file
+```
+
+## Key Features
 
 ### Backend (Go)
-- RESTful API with JWT authentication
-- MySQL database on Railway
-- Password hashing with SHA-256
-- CORS-enabled for frontend communication
-- Environment-based configuration
 
-### Frontend (React + TypeScript)
-- Modern React with TypeScript
-- Context-based authentication state management
-- Protected routes
-- User management interface
-- Deployed on Vercel
+- **JWT Authentication**: Secure token-based authentication.
+- **User Management**: CRUD operations for users.
+- **Tenant and Role Support**: Multi-tenancy and role-based access control (RBAC).
+- **MySQL Database**: Uses Railway's MySQL service.
+- **Dockerized**: Ready for containerized deployment.
+- **CORS**: Pre-configured for frontend communication.
 
-### Database (Railway MySQL)
-- Users table with tenant and role support
-- Secure password storage
-- Automatic timestamps
+### Frontend (React)
 
-## Tech Stack
+- **Login and Dashboard**: User-friendly interface for authentication and management.
+- **Protected Routes**: Secure pages that require authentication.
+- **Token Management**: Automatic handling of JWT tokens.
+- **TypeScript**: Type-safe and scalable codebase.
+- **Vercel Ready**: Optimized for deployment on Vercel.
 
-| Component | Technology |
-|-----------|-----------|
-| Backend | Go 1.21+ |
-| Frontend | React 18 + TypeScript |
-| Database | MySQL (Railway) |
-| JWT Library | github.com/golang-jwt/jwt/v5 |
-| Password Hashing | crypto/sha256 |
-| Backend Deployment | Railway |
-| Frontend Deployment | Vercel |
+## Getting Started
 
-## API Endpoints
+For a quick setup, follow the [**QUICKSTART.md**](QUICKSTART.md) guide. You'll have the entire system deployed in about 5 minutes.
 
-### Public Endpoints
-- `POST /api/auth/login` - Login and receive JWT token
+For more detailed instructions, including local development and troubleshooting, refer to the [**DEPLOYMENT.md**](DEPLOYMENT.md) guide.
 
-### Protected Endpoints (require JWT token)
-- `GET /api/users` - List all users
-- `POST /api/users` - Create new user (admin only)
-- `GET /api/users/:id` - Get user by ID
-- `PUT /api/users/:id` - Update user
-- `DELETE /api/users/:id` - Delete user (admin only)
-- `GET /api/auth/me` - Get current user info
+## Testing
 
-## JWT Token Structure
-
-```json
-{
-  "user_id": "uuid",
-  "email": "user@example.com",
-  "tenant_id": "tenant-123",
-  "role": "admin",
-  "exp": 1234567890
-}
-```
-
-## Quick Start
-
-### Backend Setup
-
-```bash
-cd backend
-go mod init github.com/MerpGoaterman/jwt-auth-system/backend
-go mod tidy
-go run main.go
-```
-
-### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-## Environment Variables
-
-### Backend
-```
-DB_HOST=<railway-mysql-host>
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=<railway-mysql-password>
-DB_NAME=railway
-JWT_SECRET=<your-secret-key>
-PORT=8080
-```
-
-### Frontend
-```
-REACT_APP_API_URL=<backend-url>
-```
+A comprehensive guide for testing the application, both locally and in a deployed environment, is available in [**TESTING.md**](TESTING.md).
 
 ## Deployment
 
-### Backend (Railway)
-1. Connect GitHub repository to Railway
-2. Set environment variables
-3. Deploy automatically on push
+Due to the interactive nature of cloud provider authentication, I was unable to complete the final deployment steps. However, I have provided detailed, step-by-step instructions in the `DEPLOYMENT.md` and `QUICKSTART.md` files to make this process as smooth as possible for you.
 
-### Frontend (Vercel)
-1. Connect GitHub repository to Vercel
-2. Set environment variables
-3. Deploy automatically on push
+## GitHub Repository
 
-## Database Schema
+The complete source code is available on GitHub:
 
-```sql
-CREATE TABLE IF NOT EXISTS users (
-    id VARCHAR(36) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    tenant_id VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
+[https://github.com/MerpGoaterman/jwt-auth-system](https://github.com/MerpGoaterman/jwt-auth-system)
 
-## Usage Example
-
-### Login
-```bash
-curl -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"admin@example.com","password":"password123"}'
-```
-
-Response:
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "user-1",
-    "email": "admin@example.com",
-    "tenant_id": "tenant-1",
-    "role": "admin"
-  }
-}
-```
-
-### Create User (with JWT token)
-```bash
-curl -X POST http://localhost:8080/api/users \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <your-jwt-token>" \
-  -d '{
-    "name":"John Doe",
-    "email":"john@example.com",
-    "password":"password123",
-    "tenant_id":"tenant-1",
-    "role":"user"
-  }'
-```
-
-## Security Features
-
-- Password hashing with SHA-256
-- JWT token expiration (24 hours)
-- Protected routes with middleware
-- CORS configuration
-- Environment-based secrets
-- Role-based access control
-
-## License
-
-MIT
-
-## Author
-
-MerpGoaterman
+---
