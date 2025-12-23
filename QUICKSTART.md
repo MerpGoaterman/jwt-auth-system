@@ -23,15 +23,29 @@ Get your JWT Authentication System up and running in 5 minutes!
    - Set to: `backend`
    - Click **Save**
 
-5. Go to **Variables** tab and add:
+5. Go to **Variables** tab and add these environment variables:
+   
+   **Note**: Railway references like `${MYSQLHOST}` will automatically pull from your MySQL service.
+   
+   | Variable | Value |
+   |----------|-------|
+   | `DB_HOST` | `${MYSQLHOST}` |
+   | `DB_PORT` | `3306` |
+   | `DB_USER` | `root` |
+   | `DB_PASSWORD` | `${MYSQLPASSWORD}` |
+   | `DB_NAME` | `railway` |
+   | `JWT_SECRET` | `your-super-secret-jwt-key-change-this-in-production` |
+   | `PORT` | `8080` |
+   
+   Click **"Add Variable"** for each one, or use **"Raw Editor"** to paste all at once:
    ```
-   DB_HOST = ${MYSQLHOST}
-   DB_PORT = 3306
-   DB_USER = root
-   DB_PASSWORD = ${MYSQLPASSWORD}
-   DB_NAME = railway
-   JWT_SECRET = your-super-secret-jwt-key-change-this-in-production
-   PORT = 8080
+   DB_HOST=${MYSQLHOST}
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=${MYSQLPASSWORD}
+   DB_NAME=railway
+   JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+   PORT=8080
    ```
 
 6. Go to **Settings** → **Networking** → Click **"Generate Domain"**
